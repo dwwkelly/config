@@ -1,0 +1,9 @@
+# Ping
+ansible -i hosts all -m ping
+
+# Update
+ansible-playbook update.yml -i hosts
+
+
+https://s3-us-west-2.amazonaws.com/digilent/Software/Waveforms2015/3.18.1/digilent.waveforms_3.18.1_amd64.deb
+https://digilent.s3-us-west-2.amazonaws.com/Software/Adept2+Runtime/2.26.1/digilent.adept.runtime_2.26.1-amd64.deb

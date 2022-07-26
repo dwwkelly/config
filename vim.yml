@@ -1,0 +1,49 @@
+---
+- name: Install packages
+  hosts: sdr
+  
+  tasks:
+  - name: Install packages
+    become: yes
+    ansible.builtin.package:
+      name:
+        - python3
+        - python3-dev
+        - vim
+        - cmake
+        - git
+        - golang
+      state: latest
+  - name: Install Vundle
+    become_user: devin
+    git:
+      repo: https://github.com/VundleVim/Vundle.vim.git 
+      dest: "~/.vim/bundle/Vundle.vim"
+  - name: Install Vundle
+    become_user: devin
+    git:
+      repo: https://github.com/VundleVim/Vundle.vim.git 
+      dest: "~/.vim/bundle/Vundle.vim"
+  - name: Clone YCM
+    become_user: devin
+    git:
+      repo: https://github.com/ycm-core/YouCompleteMe
+      dest: "~/.vim/bundle/YouCompleteMe"
+  - name: Check if YCM shared obj exists
+    become_user: devin
+    stat:
+      path: "~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.cpython-38-x86_64-linux-gnu.so"
+    register: YCM_BUILT
+  - name: Install YCM
+    remote_user: devin
+    shell:
+      chdir: "~/.vim/bundle/YouCompleteMe"
+      cmd: "python3 install.py --clangd-completer"
+    when: not YCM_BUILT.stat.exists
+  - name: Copy vimrc
+    ansible.builtin.copy:
+      src: vimrc
+      dest: "~/.vim/vimrc"
+      owner: devin
+      group: devin
+      mode: '0640'

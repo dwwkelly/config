@@ -1,0 +1,29 @@
+---
+- name: Setup Odroid
+  hosts: odroid
+  become: yes
+  
+  tasks:
+  - name: Install packages
+    ansible.builtin.package:
+      name:
+        - vim
+        - git
+        - htop
+        - ethtool
+        - build-essential 
+        - libelf-dev 
+      state: latest
+  - name: Copy systemd unit file
+    ansible.builtin.copy:
+      src: odroid_wol_unitfile
+      dest: /etc/systemd/system/wol@.service
+      owner: root
+      group: root
+      mode: '0660'
+  - name: Make sure a service unit is running
+    ansible.builtin.systemd:
+      state: started
+      enabled: yes
+      daemon_reload: yes
+      name: wol@enp2s0

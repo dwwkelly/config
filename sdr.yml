@@ -1,0 +1,196 @@
+---
+- name: Install packages
+  hosts: sdr
+  become: yes
+  
+  tasks:
+  - name: Install pacakges
+    package:
+      name:
+        - vim
+        - neovim
+        - git
+        - gqrx-sdr
+        - python3-ipython
+        - julia
+        - python3-pip
+        - jupyter
+        - python-matplotlib-data
+        - python2
+        - python2-minimal
+        - python2.7
+        - python2.7-minimal
+        - python3-click-plugins
+        - python3-cycler
+        - python3-kiwisolver
+        - python3-matplotlib
+        - python3-networkx
+        - python3-opengl
+        - libairspy0
+        - libairspyhf1
+        - libbladerf2
+        - libboost-date-time-dev
+        - libboost-filesystem-dev
+        - libboost-program-options-dev
+        - libboost-regex-dev
+        - libboost-system-dev
+        - libboost-test-dev
+        - libboost-thread-dev
+        - libcodec2-0.9
+        - libcppunit-1.15-0
+        - libcppunit-dev
+        - libfreesrp0
+        - libglfw3
+        - libgmp-dev
+        - libgmpxx4ldbl
+        - libcppunit-1.15-0
+        - libcppunit-dev
+        - libfreesrp0
+        - libglfw3
+        - libgmp-dev
+        - libgmpxx4ldbl
+        - libgsl23
+        - libgslcblas0
+        - libgsm1
+        - libgsm1-dev
+        - libhamlib2
+        - libhidapi-libusb0
+        - liblbfgsb0
+        - liblimesuite20.01-1
+        - liblog4cpp5-dev
+        - liblog4cpp5v5
+        - libmirisdr0
+        - libosmosdr0
+        - libportaudio2
+        - libpython2-stdlib
+        - libpython2.7-minimal
+        - libpython2.7-stdlib
+        - libqt5designer5
+        - libqt5help5
+        - libqwt-qt5-6
+        - librtaudio6
+        - librtlsdr0
+        - libsdl1.2debian
+        - libsoapysdr0.7
+        - libtecla1
+      state: latest
+  - name: Install python deps
+    pip:
+      name:
+        - pandas
+        - numpy
+        - ipdb
+
+  - name: Check if Digielent Adept Runtime is installed
+    command: dpkg-query -W digilent.adept.runtime
+    register: digilent_runtime_check_deb
+    failed_when: digilent_runtime_check_deb.rc > 1
+    changed_when: digilent_runtime_check_deb.rc == 1
+  - name: Download Digilent Adept Runtime
+    get_url:
+      url="https://digilent.s3-us-west-2.amazonaws.com/Software/Adept2+Runtime/2.26.1/digilent.adept.runtime_2.26.1-amd64.deb"
+      dest="/tmp/digilent.adept.runtime_2.26.1-amd64.deb"
+    when: digilent_runtime_check_deb.rc == 1
+  - name: Install adept runtime
+    apt: deb="/tmp/digilent.adept.runtime_2.26.1-amd64.deb"
+    when: digilent_runtime_check_deb.rc == 1
+
+    # Digilent Waveforms
+  - name: Check if Digilent Waveforms is installed
+    command: dpkg-query -W digilent.waveforms
+    register: digilent_waveforms_check_deb
+    failed_when: digilent_waveforms_check_deb.rc > 1
+    changed_when: digilent_waveforms_check_deb.rc == 1
+  - name: Download Digilent Adept Runtime
+    get_url:
+      url="https://s3-us-west-2.amazonaws.com/digilent/Software/Waveforms2015/3.18.1/digilent.waveforms_3.18.1_amd64.deb"
+      dest="/tmp/digilent.waveforms_3.18.1_amd64.deb"
+    when: digilent_waveforms_check_deb.rc == 1
+  - name: Install adept waveforms
+    apt: deb="/tmp/digilent.waveforms_3.18.1_amd64.deb"
+    when: digilent_waveforms_check_deb.rc == 1
+
+    # Install NanoVNA
+  - name: Install nanovna packages
+    package:
+      name:
+        - automake 
+        - libtool 
+        - make 
+        - g++ 
+        - libeigen3-dev
+        - libfftw3-dev
+        - libqt5charts5-dev
+        - qt5-default
+        - libqt5svg5-dev
+  - name: Install NanoVNA
+    become_user: devin
+    git:
+      repo: "git@github.com:nanovna-v2/NanoVNA-QT.git"
+      dest: "~/nanovna/"
+  - name: Run autoreconf 
+    become_user: devin
+    command: autoreconf --install
+    args:
+      chdir: ~/nanovna/
+      creates: ~/nanovna/aclocal.m4
+  - name: Run configure for 
+    become_user: devin
+    command: ./configure
+    args:
+      chdir: "~/nanovna"
+      creates: ~/nanovna/config.status
+  - name: Run make for xavna
+    become_user: devin
+    command: make
+    args:
+      chdir: "~/nanovna/"
+      creates: "~/nanovna/libxavna/.libs/libxavna.so"
+  - name: Run qmake for xavna
+    become_user: devin
+    command: qmake
+    args:
+      chdir: "~/nanovna/libxavna/xavna_mock_ui/"
+      creates: "~/nanovna/libxavna/xavna_mock_ui/.qmake.stash"
+  - name: Run make for xavna mock ui
+    become_user: devin
+    command: make
+    args:
+      chdir: "~/nanovna/libxavna/xavna_mock_ui/"
+      creates: "~/nanovna/libxavna/xavna_mock_ui/libxavna_mock_ui.so"
+  - name: Run qmake for xavna mock ui
+    become_user: devin
+    command: qmake
+    args:
+      chdir: "~/nanovna/vna_qt/"
+      creates: "~/nanovna/vna_qt/.qmake.stash"
+  - name: Run make for xavna mock ui
+    become_user: devin
+    command: make
+    args:
+      chdir: "~/nanovna/vna_qt/"
+      creates: "~/nanovna/vna_qt/vna_qt"
+  - name: Copy nano vna image file
+    become_user: devin
+    ansible.builtin.copy:
+      src: nanovna.jpg
+      dest: ~/nanovna/nanovna.jpg
+      owner: devin
+      group: devin
+      mode: '0660'
+  - name: Copy .desktop file
+    become_user: devin
+    ansible.builtin.copy:
+      src: nanovna.desktop
+      dest: ~/Desktop/nanavna.desktop
+      owner: devin
+      group: devin
+      mode: '0770'
+  - name: Install UHD UDEV Rules File
+    become: yes
+    ansible.builtin.copy:
+      src: uhd-usrp.rules
+      dest: /etc/udev/rules.d/uhd-usrp.rules
+      owner: root
+      group: root
+      mode: '0600'

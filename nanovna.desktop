@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Nano VNA
+Comment=Nano VNA GUI
+Exec=/home/devin/nanovna/run /home/devin/nanovna/vna_qt/vna_qt
+Path=/home/devin/nanovna/vna_qt
+Icon=/home/devin/nanovna/nanovna.jpg
+Terminal=false
+Type=Application
+Categories=Utility;Development;
