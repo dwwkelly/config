@@ -65,6 +65,7 @@ set listchars=tab:▸\ ,eol:¬
 nmap <leader>l :set list!<CR>
 nmap <leader>c :set cursorcolumn!<CR>
 set nowrapscan
+syntax on
 
 " remove trailing white space and windows newlines ( ^M )
 autocmd FileType conf,c,cpp,java,php,js,python,twig,xml,yml autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
