@@ -1,0 +1,12 @@
+---
+- name: Install packages
+  hosts: devin-mbp
+  
+  tasks:
+  - name: Copy ZSH
+    ansible.builtin.copy:
+      src: zshrc
+      dest: "~/.zshrc"
+      owner: devin
+      group: staff
+      mode: '0640'

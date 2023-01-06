@@ -9,6 +9,14 @@ fi
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 export PATH="$PATH:/Users/devin/Library/Python/3.8/bin"
+export PATH="$PATH:/Users/devin/.gem/ruby/2.6.0/bin"
+export PATH="/usr/local/opt/openjdk/bin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
+export PATH="/opt/local/bin/:$PATH"
+export PATH="/usr/local/bin/:$PATH"
+
+#export PATH="/usr/local/opt/openjdk/bin:$PATH"
+#export PATH="/usr/local/sbin:$PATH"
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/devin/.oh-my-zsh"
@@ -28,7 +36,7 @@ ZSH_THEME="robbyrussell"
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+CASE_SENSITIVE="true"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
@@ -100,11 +108,11 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='vim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -126,6 +134,3 @@ source ~/code/powerlevel10k/powerlevel10k.zsh-theme
 export FZF_DEFAULT_OPTS='—height=40% —preview="cat {}" —preview-window=right:60%:wrap'
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
-
-export PATH="/usr/local/opt/openjdk/bin:$PATH"
-export PATH="/usr/local/sbin:$PATH"
