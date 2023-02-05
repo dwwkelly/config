@@ -1,0 +1,55 @@
+---
+- name: Install packages
+  hosts: sdr_group
+  become: yes
+  
+  tasks:
+  - name: Install pacakges
+    package:
+      name:
+        - vim
+        - neovim
+        - git
+        - gqrx-sdr
+        - wsjtx
+        - wsjtx-doc
+        - wsjtx-data
+        - wsjtx
+        - trustedqsl
+        - python3-pyhamtools
+        - klog
+        - flrig
+        - fldigi
+        - direwolf
+        - ax25-apps
+        - ax25-tools
+        - ax25-xtools
+        - libax25-dev
+        - xastir
+        - xastir-data
+        - gpredict
+        - splat
+        - xnec2c
+        - freedv
+        - python3-hamlib
+        - grig
+        - chirp
+      state: latest
+
+    https://radioddity.s3.amazonaws.com/Xiegu_X6100_Manual_%5BEN%5D_20220817.pdf
+    https://radioddity.s3.amazonaws.com/Xiegu_X6100_Firmware_Upgrade_Tutorial_V1.1.pdf
+    https://radioddity.s3.amazonaws.com/Xiegu_X6100_Wifi_%26_Bluetooth_Function_Instructions_20211230.pdf
+    http://www.arrowantennas.com/inst/146437-10_All%20Suffixes_Instruction_Sheet.pdf
+    https://download.hkwezhan.cn/contents/sitefiles3606/18031440/files/78424..pdf?response-content-disposition=inline%3Bfilename%2A%3Dutf-8%27%27X6100%2520Operation%2520Manual-V1.3.docx.pdf&response-content-type=application%2Fpdf&auth_key=1673832127-db7f0f288ccc466a9e5f2132a40a9f7d-0-ce1d6d5913635ed6cd49f7102d98ec68
+    https://manual.kenwood.com/en_contents/attachDownload/87649
+    https://manual.kenwood.com/files/4ff15b9c0988f.pdf
+    https://manual.kenwood.com/files/B5K-0412-00.pdf
+    https://manual.kenwood.com/files/4ff15b9c0988f.pdf
+    https://manual.kenwood.com/files/B62-2235-50.pdf
+    https://manual.kenwood.com/files/B62-2331-40.pdf
+    https://manual.kenwood.com/files/B5K-0441-00.pdf
+    http://newsuperantenna.com/Super-Antenna-Manuals-Downloads/Super_Antenna_Application_Note_MP1_series_SWR_Troubleshooting_1a.pdf
+    http://newsuperantenna.com/Super-Antenna-Manuals-Downloads/Super_Antenna_Application_Note_MP1_series_Optimum_Setup_2b.pdf
+    http://newsuperantenna.com/Super-Antenna-Manuals-Downloads/Super_Antenna_Application_Note_MP1_series_Optimum_Setup_2b.pdf
+    http://newsuperantenna.com/Super-Antenna-Manuals-Downloads/Super_Antenna_MP1C_User_Manual.pdf
+    http://newsuperantenna.com/Super-Antenna-Manuals-Downloads/SuperAntenna_FG1_SuperGuide_Frequency_Guide_SWR_Ruler.pdf

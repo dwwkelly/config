@@ -1,0 +1,52 @@
+---
+# From
+# https://medium.com/coffee-in-a-klein-bottle/install-julia-1-5-on-ubuntu-bb8be4b2571d
+- name: Install Julia
+  hosts: sdr
+  become: yes
+  
+  tasks:
+  - name: Download gzip
+    ansible.builtin.get_url:
+      url: https://julialang-s3.julialang.org/bin/linux/x64/1.6/julia-1.6.7-linux-x86_64.tar.gz
+      dest: /tmp/julia-1.6.7-linux-x86_64.tar.gz
+      mode: '0660'
+  - name: Extract Julia gzip
+    ansible.builtin.unarchive:
+      src: /tmp/julia-1.6.7-linux-x86_64.tar.gz
+      dest: /tmp/
+      remote_src: yes
+  - name: Give insecure permissions to an existing file
+    ansible.builtin.file:
+      path: /opt/julia/
+      owner: devin
+      group: devin
+      mode: '0770'
+      state: directory
+  - name: Sync dirs
+    synchronize:
+      src: /tmp/julia-1.6.7/ 
+      dest: /opt/julia/
+      recursive: true
+      owner: true
+    delegate_to: "{{ inventory_hostname }}"
+  - name: Create sym link for julia binary
+    file:
+      src: /opt/julia/bin/julia
+      dest: /usr/local/bin/julia
+      state: link
+
+        #        using Pkg
+        #Pkg.add(“IJulia”)
+        #
+        #
+        #using IJulia
+        #installkernel("Julia")
+        #
+        #  - name: Move Julia to /opt/
+        #    copy:
+        #      src: /tmp/julia-1.6.7/ 
+        #      dest: /opt/julia/
+        #      remote_src: yes
+        #      force: yes
+        #      directory_mode: yes
